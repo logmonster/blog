@@ -22,7 +22,8 @@ filebeat:
       paths:
         #- /var/log/*.log
         #- c:\programdata\elasticsearch\logs\*
-        - /Users/jason.wong/Documents/es_related/elk_5.0.0_alpha5/log_data/access.log
+        #- /Users/jason.wong/Documents/es_related/elk_5.0.0_alpha5/log_data/access.log
+        - /Users/jason.wong/Development/elastic/blog/blog/dataset/stocks/alphabet-2016.csv
 
       # Configure the file encoding for reading files with international characters
       # following the W3C recommendation for HTML5 (http://www.w3.org/TR/encoding).
@@ -57,6 +58,7 @@ filebeat:
       # matching any regular expression from the list. The include_lines is called before
       # exclude_lines. By default, no lines are dropped.
       #exclude_lines: ["^DBG"]
+      exclude_lines: ["^\"date\""]
 
       # Include lines. A list of regular expressions to match. It exports the lines that are
       # matching any regular expression from the list. The include_lines is called before
