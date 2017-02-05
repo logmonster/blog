@@ -1,0 +1,108 @@
+
+GET _cat/indices
+
+DELETE blog-test-2017.02.05
+
+GET blog-test-2017.02.05/_search
+
+
+
+
+PUT _ingest/pipeline/test-lowercase-pipeline
+{
+  "description" : "lowercasing feature",
+  "processors" : [
+    {
+      "lowercase" : {
+        "field": "hobbies"
+      }
+    }
+  ]
+}
+
+GET _ingest/pipeline
+
+POST _ingest/pipeline/test-lowercase-pipeline/_simulate
+{
+  "docs": [
+    {
+      "_source": {
+        "hobbies": "ANYTHING ABOUT swIMMing"
+      }
+    },
+    {
+      "_source": {
+        "hobbies": "@ HiYa 123 aND loVE @"
+      }
+    }
+  ]
+}
+
+
+PUT _ingest/pipeline/blog-test-stocks-pipeline
+{
+  "description": "stocks breaking for index blog-test*",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "\"%{DATA:stock_date}\"%{GREEDYDATA:remainings}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "stock_date",
+        "target_field": "stock_date",
+        "formats": [
+          "YYYY/MM/dd"
+        ]
+      }
+    }
+  ]
+}
+
+GET _ingest/pipeline
+
+POST _ingest/pipeline/blog-test-stocks-pipeline/_simulate
+{
+  "docs": [
+    {
+      "_source": {
+        "message": "\"2016/12/30\",\"771.8200\",\"1769809.0000\",\"782.7500\",\"782.7800\",\"770.4100\""
+      }
+    },
+    {
+      "_source": {
+        "message": "\"2016/12/12\",\"789.2700\",\"2102288.0000\",\"785.0400\",\"791.2500\",\"784.3554\""
+      }
+    }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
