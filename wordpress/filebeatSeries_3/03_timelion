@@ -1,0 +1,7 @@
+
+
+# combining 2 datasets together (amazon and google-alphabet)
+.es(index=stocks_amazon,metric='avg:price_close').label('amazon').color('#006699'), .es(index='stocks_google',metric='avg:price_close').label('google')
+
+# holt winters + example on how to set "query" on stocks_all index (1 index for all approach)
+.es(q='symbol:AMZN',index='stocks_all',metric='avg:price_close'), .es(index=stocks_ibm,metric='avg:price_close').label('ibm trend (predict)').color('#006699').holt(alpha=0.1,beta=0.1,gamma=0.9,season='1M').lines(fill=2), .es(index=stocks_ibm,metric='avg:price_close').label('ibm trend').color('#00ff00')

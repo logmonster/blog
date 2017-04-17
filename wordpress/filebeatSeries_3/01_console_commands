@@ -1,0 +1,111 @@
+
+GET _cat/indices?v&h=index&s=index
+
+GET stocks_ibm/_search
+GET stocks_google/_search
+GET stocks_amazon/_search
+GET stocks_netflix/_search
+GET stocks_tesla/_search
+
+
+GET stocks_ibm,stocks_google,stocks_amazon,stocks_netflix,stocks_tesla/_search
+{
+  "_source": ["symbol"], 
+  "size": 0, 
+  "aggs": {
+    "unique_symbol": {
+      "terms": {
+        "field": "symbol.keyword",
+        "size": 10
+      }
+    }
+  }
+}
+GET stocks_ibm,stocks_google,stocks_amazon,stocks_netflix,stocks_tesla/_search
+{
+  "query": {
+    "match": {
+      "symbol": "amzn nflx"
+    }
+  }
+}
+
+
+GET _ingest/pipeline
+
+PUT _ingest/pipeline/blog_stocks_breakdown
+{
+  "description" : "break down the stocks data into fields (blog tutorial)",
+  "processors" : [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [ "\"%{DATA:stock_date}\",\"%{DATA:price_close:float}\",\"%{DATA:trx_volume:float}\",\"%{DATA:price_open:float}\",\"%{DATA:price_high:float}\",\"%{DATA:price_low:float}\"" ]
+      },
+      "date": {
+        "field": "stock_date",
+        "formats": ["YYYY/MM/dd"],
+        "timezone": "UTC"
+      },
+      "remove": {
+        "field": "message"
+      }
+    }
+  ]
+}
+
+# approach 2, all in one
+GET stocks_all/_search
+{
+  "query": {
+    "match": {
+      "symbol": "amzn ibm"
+    }
+  }
+}
+GET stocks_all/_search
+{
+  "query": {
+    "terms": {
+      "symbol.keyword": ["AMZN", "IBM"]
+    }
+  }
+}
+GET stocks_all/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "terms": {
+            "symbol.keyword": [
+              "AMZN",
+              "IBM"
+            ]
+          }
+        },
+        {
+          "range": {
+            "price_close": {
+              "gte": 150,
+              "lte": 190
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+GET stocks_all/_search
+{
+  "_source": ["symbol"], 
+  "size": 0, 
+  "aggs": {
+    "unique_symbol": {
+      "terms": {
+        "field": "symbol.keyword",
+        "size": 10
+      }
+    }
+  }
+}
