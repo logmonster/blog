@@ -1,0 +1,83 @@
+{
+  "template" : "movies_4_blogs_*",
+  "version" : 50001,
+  "settings" : {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  },
+    "mappings": {
+      "doc": {
+        "properties": {
+          "adult": {
+            "type": "boolean"
+          },
+          "backdrop_path": {
+            "type": "keyword"
+          },
+          "genre_descs": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "genre_ids": {
+            "type": "integer"
+          },
+          "id": {
+            "type": "long"
+          },
+          "original_language": {
+            "type": "keyword"
+          },
+          "original_title": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "overview": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "popularity": {
+            "type": "float"
+          },
+          "poster_path": {
+            "type": "keyword"
+          },
+          "release_date": {
+            "type": "date"
+          },
+          "title": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "video": {
+            "type": "boolean"
+          },
+          "vote_average": {
+            "type": "float"
+          },
+          "vote_count": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+}
